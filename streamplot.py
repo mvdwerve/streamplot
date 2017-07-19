@@ -6,8 +6,8 @@ try:
 	import pyqtgraph as pg
 	from pyqtgraph.Qt import QtGui, QtCore
 	pg.setConfigOption('background', 'w')
-except Exception, e:
-	print "Unable to import pyqtgraph"
+except Exception as e:
+	print("Unable to import pyqtgraph")
 
 class LivePlotter(object):
 	"""
@@ -46,8 +46,8 @@ class LivePlotter(object):
 			self.p.setLabel('left', self.y_axis, units=self.y_unit)
 			self.p.setLabel('bottom', self.x_axis, units=self.x_unit)
 			self.plot = self.p.plot(self.x, self.y, pen=self.pen)
-		except Exception, e:
-			print "Unable to initialize Live Plotter"
+		except Exception as e:
+			print("Unable to initialize Live Plotter")
 
 
 	def add(self, y, x=None):
@@ -78,13 +78,13 @@ class LivePlotter(object):
 			if point_nb is not None:
 				x_size = len(self.x)
 				downsample = x_size / point_nb
-			
+
 			# self.plot.setData(self.x, self.y, downsample=downsample)
 			self.plot.setData(self.x, self.y)
 			pg.QtGui.QApplication.processEvents()
 			self.last_refresh = t
 
-		except Exception, e:
+		except Exception as e:
 			pass
 
 	def close(self):
@@ -93,7 +93,7 @@ class LivePlotter(object):
 		"""
 		try:
 			self.win.close()
-		except Exception, e:
+		except Exception as e:
 			pass
 
 class PlotManager(object):
@@ -112,7 +112,7 @@ class PlotManager(object):
 		costs  = np.arange(length)
 
 		plt_mgr = PlotManager(
-			title="plots", 
+			title="plots",
 			nline=3)
 
 		for i in range(length):
@@ -138,8 +138,8 @@ class PlotManager(object):
 			self.plots = collections.OrderedDict()
 			self.win = pg.GraphicsWindow(title=self.title)
 			self.win.resize(self.size[0], self.size[1])
-		except Exception, e:
-			print "Unable to initialize Plot Manager"
+		except Exception as e:
+			print("Unable to initialize Plot Manager")
 
 	def add(self, name, y, x=None, **kwargs):
 		"""
@@ -152,22 +152,22 @@ class PlotManager(object):
 					self.win.nextRow()
 
 				self.plots[name] = LivePlotter(
-					name=name, 
-					win=self.win, 
+					name=name,
+					win=self.win,
 					frequency=self.frequency,
 					downsample=self.downsample,
 					point_nb=self.point_nb,
 					**kwargs)
 
 			self.plots[name].add(y, x)
-		except Exception, e:
+		except Exception as e:
 			pass
 
 	def update(self):
 		"""
 		Updates all subplots
 		"""
-		for name, plot in self.plots.iteritems():
+		for name, plot in self.plots.items():
 			plot.update()
 
 	def close(self):
@@ -176,7 +176,7 @@ class PlotManager(object):
 		"""
 		try:
 			wait = input("Press ENTER to close plots")
-		except Exception, e:
+		except Exception as e:
 			pass
-		for name, plot in self.plots.iteritems():
+		for name, plot in self.plots.items():
 			plot.close()
